@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const Coverage = require('../models/Coverage');
+const verifyToken = require('../middleware/verifyToken')
 
 router.get('/', async (req, res) => {
   try {
@@ -19,7 +20,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', verifyToken, async (req, res) => {
   const { productCode, description, minAge, sumInsuredMultiplier } = req.body;
   try {
     const coverage = await Coverage.findByIdAndUpdate(
@@ -39,7 +40,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Add Coverage
-router.post('/', async (req, res) => {
+router.post('/',verifyToken, async (req, res) => {
   const newCoverage = new Coverage({
     productCode: req.body.productCode,
     description: req.body.description,
@@ -55,7 +56,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', verifyToken, async (req, res) => {
   try {
     const cover = await Coverage.findByIdAndDelete(req.params.id);
     if (!cover) return res.status(404).send();
