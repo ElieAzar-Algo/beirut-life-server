@@ -1,7 +1,8 @@
 const router = require('express').Router();
 const Setting = require('../models/Setting');
+const verifyToken = require('../middleware/verifyToken')
 
-router.post('/add', async (req, res) => {
+router.post('/add', verifyToken, async (req, res) => {
   const newSetting = new Setting({
     settingKey: req.body.settingKey,
     settingValue: req.body.settingValue,
@@ -15,7 +16,7 @@ router.post('/add', async (req, res) => {
   }
 });
 
-router.post('/getSeq', async (req, res) => {
+router.post('/getSeq',verifyToken,  async (req, res) => {
   const query = { settingKey: 'policySeq' };
   const newSeq = await Setting.findOneAndUpdate(
     query,

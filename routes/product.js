@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const Product = require('../models/Product');
+const verifyToken = require('../middleware/verifyToken')
 
 router.get('/', async (req, res) => {
   try {
@@ -19,7 +20,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id',verifyToken, async (req, res) => {
   const {
     title,
     description,
@@ -56,7 +57,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Add product
-router.post('/', async (req, res) => {
+router.post('/', verifyToken, async (req, res) => {
   const newProduct = new Product({
     productCode: req.body.productCode,
     title: req.body.title,
@@ -84,7 +85,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id',verifyToken, async (req, res) => {
   try {
     const prod = await Product.findByIdAndDelete(req.params.id);
     if (!prod) return res.status(404).send();

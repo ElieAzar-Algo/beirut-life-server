@@ -8,6 +8,7 @@ const saleRoute = require('./routes/sale');
 const stripeRoute = require('./routes/stripe');
 const settingRoute = require('./routes/setting');
 const bobpayRoute = require('./routes/bobpay');
+const auth = require('./routes/auth');
 const Stripe = require('stripe');
 
 const app = express();
@@ -25,6 +26,7 @@ mongoose
 
 app.use(express.json());
 app.use(cors());
+app.use('/api/user', auth);
 app.use('/api/product', productRoute);
 app.use('/api/coverage', coverageRoute);
 app.use('/api/sale', saleRoute);
